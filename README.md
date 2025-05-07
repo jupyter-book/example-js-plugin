@@ -1,0 +1,3 @@
+# MyST JS Plugin
+
+An example of deploying a MyST book that uses a JS Plugin to strike-though document prose (see `src/plugin.mjs`). This plugin uses rollup to bundle dependencies.
