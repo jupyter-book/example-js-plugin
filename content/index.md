@@ -2,7 +2,8 @@
 
 This is normal text.
 
-:::{div}
+:::{note} A redacted note.
 :class: redacted
-This is redacted text!
+
+This is redacted text! **Secret!**
 :::
