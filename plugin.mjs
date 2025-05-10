@@ -1,24 +1,51 @@
-import { visit } from "unist-util-visit";
+import { visit, SKIP } from "unist-util-visit";
+
+/**
+ * Perform the redaction transform by wrapping text nodes inside delete nodes
+ *
+ * @param node - tree to transform
+ */
+function redactTransformImpl(node, index, parent) {
+  console.log("Found redacted", node.type);
+  visit(node, "text", (child, childIndex, childParent) => {
+    const maybeParent = childParent || parent;
+    const maybeIndex = childIndex || index;
+    if (maybeParent) {
+      maybeParent.children[maybeIndex] = {
+        type: "delete",
+        children: [child],
+      };
+    }
+    return SKIP;
+  });
+}
+
+/**
+ * Locate `redacted` nodes, and redact their text children (recursively)
+ *
+ * @param node - tree to transform
+ */
+function redactTransform(node) {
+  const test = (node, index, parent) => {
+    return (
+      node.class &&
+      node.class.split(/\s/).some((class_) => class_ === "redacted")
+    );
+  };
+  visit(node, test, (node, index, parent) =>
+    redactTransformImpl(node, index, parent),
+  );
+}
 
 const plugin = {
-  name: "Strong to emphasis",
+  name: "Redact text",
   transforms: [
     {
       name: "transform-typography",
-      doc: "An example transform that rewrites bold text as text with emphasis.",
+      doc: "An example transform that rewrites text with a 'redacted' class to become children of delete",
       stage: "document",
       plugin: (_, utils) => (node) => {
-        const test = (node, index, parent) => {
-          return (
-            parent &&
-            parent.type === "div" &&
-            parent.class?.includes("redact") &&
-            node.type === "paragraph"
-          );
-        };
-        visit(node, test, (node) => {
-          node.children = [{ type: "delete", children: node.children }];
-        });
+        redactTransform(node);
       },
     },
   ],

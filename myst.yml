@@ -2,8 +2,6 @@
 version: 1
 project:
   title: JS Plugin
-  references:
-    guide: https://mystmd.org/guide
   plugins:
     - dist/plugin.mjs
   toc:
