@@ -9,4 +9,4 @@ project:
 site:
   template: book-theme
   options:
-    logo_text: Python Plugin
+    logo_text: JS Plugin
