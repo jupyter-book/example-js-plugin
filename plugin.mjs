@@ -1,25 +1,4 @@
-import { visit, SKIP } from "unist-util-visit";
-
-/**
- * Perform the redaction transform by wrapping text nodes inside delete nodes
- *
- * @param node - tree to transform
- */
-function redactTransformImpl(node, index, parent) {
-  console.log("Found redacted", node.type);
-  visit(node, "text", (child, childIndex, childParent) => {
-    const maybeParent = childParent || parent;
-    const maybeIndex = childIndex || index;
-    if (maybeParent) {
-      maybeParent.children[maybeIndex] = {
-        type: "delete",
-        children: [child],
-      };
-    }
-    return SKIP;
-  });
-  return SKIP;
-}
+import { visit, SKIP, EXIT } from "unist-util-visit";
 
 /**
  * Locate `redacted` nodes, and redact their text children (recursively)
@@ -33,9 +12,17 @@ function redactTransform(node) {
       child.class.split(/\s/).some((class_) => class_ === "redacted")
     );
   };
-  visit(node, test, (child, index, parent) =>
-    redactTransformImpl(child, index, parent),
-  );
+  visit(node, test, (child, index, parent) => {
+    // Wrap any child text nodes
+    visit(child, "text", (textChild, textIndex, textParent) => {
+      (textParent ?? parent).children[textParent ? textIndex : index] = {
+        type: "delete",
+        children: [textChild],
+      };
+      return SKIP;
+    });
+    return SKIP;
+  });
 }
 
 const plugin = {
