@@ -18,6 +18,7 @@ function redactTransformImpl(node, index, parent) {
     }
     return SKIP;
   });
+  return SKIP;
 }
 
 /**
@@ -26,14 +27,14 @@ function redactTransformImpl(node, index, parent) {
  * @param node - tree to transform
  */
 function redactTransform(node) {
-  const test = (node, index, parent) => {
+  const test = (child, index, parent) => {
     return (
-      node.class &&
-      node.class.split(/\s/).some((class_) => class_ === "redacted")
+      child.class &&
+      child.class.split(/\s/).some((class_) => class_ === "redacted")
     );
   };
-  visit(node, test, (node, index, parent) =>
-    redactTransformImpl(node, index, parent),
+  visit(node, test, (child, index, parent) =>
+    redactTransformImpl(child, index, parent),
   );
 }
 
