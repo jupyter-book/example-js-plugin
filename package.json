@@ -1,7 +1,7 @@
 {
-  "name": "src",
+  "name": "example-js-plugin",
   "version": "1.0.0",
-  "main": "index.mjs",
+  "main": "dist/plugin.mjs",
   "author": "",
   "type": "module",
   "license": "ISC",
@@ -10,7 +10,7 @@
     "esbuild": "0.25.4"
   },
   "scripts": {
-	  "build": "esbuild plugin.mjs --bundle --outfile=dist/plugin.mjs --format=esm"
+    "build": "esbuild plugin.mjs --bundle --outfile=dist/plugin.mjs --format=esm"
   },
   "dependencies": {
     "unist-util-visit": "^4.1.2"
