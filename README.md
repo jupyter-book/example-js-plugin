@@ -22,10 +22,10 @@ project:
     - /path/to/plugin.mjs
 ```
 
-Alternatively, you can publish the built plugin to a public artifact repository, and users can directly link to it in their `myst.yml`:
+Alternatively, you can publish the built plugin to a public artifact repository, such as a GitHub Release artifact, and users can directly link to it in their `myst.yml`:
 
 ```yaml
 project:
   plugins:
-    - https://www.someone-elses-myst-plugins.com/plugin.mjs
+    - https://github.com/jupyter-book/example-js-plugin/releases/latest/download/plugin.mjs
 ```
